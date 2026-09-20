@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Task To Earn</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    ::-webkit-scrollbar { display: none; }
+    body { -ms-overflow-style: none; scrollbar-width: none; -webkit-tap-highlight-color: transparent; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans flex justify-center min-h-screen select-none">
+
+  <!-- Mobile Frame Container -->
+  <div class="w-full max-w-[420px] bg-white min-h-screen relative flex flex-col shadow-2xl pb-24">
+
+    <!-- Top Header -->
+    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md px-5 pt-4 pb-3 flex items-center justify-between border-b border-gray-100">
+      <div class="flex items-center gap-3">
+        <!-- Back Button -->
+        <button id="back-btn" onclick="showDashboard()" class="hidden p-1 text-gray-700 hover:text-black transition">
+          <i data-lucide="arrow-left" class="w-6 h-6"></i>
+        </button>
+
+        <!-- Gallery App Logo -->
+        <img id="app-logo" src="logo.png" onerror="this.src='https://via.placeholder.com/40'" alt="App Logo" class="w-9 h-9 rounded-full object-cover border border-gray-200" />
+        
+        <!-- App Title -->
+        <h1 id="page-title" class="font-bold text-gray-900 text-lg tracking-tight">Task To Earn</h1>
+      </div>
+
+      <!-- Top Right Badge -->
+      <div class="flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-600 px-2 py-0.5 rounded-full text-xs font-semibold">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+        <span>+</span>
+      </div>
+    </header>
+
+    <!-- VIEW 1: DASHBOARD FEED -->
+    <main id="view-dashboard" class="flex-1 px-4 pt-3 flex flex-col gap-3.5">
+      
+      <!-- Potential Earnings Card -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#171e2e] via-[#0f172a] to-[#090d16] text-white p-5 shadow-lg shadow-slate-900/10">
+        <p class="text-xs font-normal text-slate-400 mb-1">Potential Earnings</p>
+        <p id="total-earnings" class="text-3xl font-extrabold tracking-tight">₹4800.00</p>
+      </div>
+
+      <!-- Auto-Generated Task Cards List -->
+      <div id="tasks-container" class="flex flex-col gap-2.5"></div>
+
+    </main>
+
+    <!-- VIEW 2: TASK DETAIL PAGE -->
+    <main id="view-details" class="hidden flex-1 px-4 pt-3 flex flex-col gap-4">
+      
+      <!-- Task Hero Banner -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#171e2e] via-[#0f172a] to-[#090d16] text-white p-4 shadow-lg flex items-center gap-3.5">
+        <img id="detail-task-logo" src="" alt="Logo" class="w-12 h-12 rounded-xl object-cover bg-white p-0.5 border border-slate-700" />
+        <div class="flex-1">
+          <h2 id="detail-task-name" class="font-bold text-base text-white">Open Demat Account</h2>
+          <div class="flex items-center gap-2 mt-1">
+            <span id="detail-reward" class="bg-slate-800 border border-slate-700 text-gray-200 text-xs px-2.5 py-0.5 rounded-full">Earn ₹300.00</span>
+            <span id="detail-steps" class="bg-slate-800 border border-slate-700 text-gray-300 text-xs px-2.5 py-0.5 rounded-full">Steps 5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Link Copy Container -->
+      <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+        <label class="block text-xs font-bold text-gray-800 mb-2">Link</label>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2.5 py-2 rounded-xl">Link</span>
+          <div class="relative flex-1">
+            <input id="campaign-url" readonly type="text" value="" class="w-full bg-blue-50 text-blue-600 text-xs px-3 py-2 rounded-xl border border-blue-100 truncate focus:outline-none select-all font-mono" />
+          </div>
+          <button onclick="copyLink()" class="text-xs font-bold text-gray-700 hover:text-black border border-gray-200 rounded-xl px-3.5 py-2 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 transition">
+            COPY
+          </button>
+        </div>
+        <p id="copy-toast" class="hidden text-emerald-600 text-[11px] font-medium mt-1.5 transition">
+          ✓ Link copied to clipboard!
+        </p>
+      </div>
+
+      <!-- Video Section -->
+      <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+        <label class="block text-xs font-bold text-gray-800 mb-2.5">Video</label>
+        <div class="relative rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+          <video id="tutorial-video" class="w-full h-full object-cover" controls playsinline poster="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Steps Accordion -->
+      <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+        <label class="block text-xs font-bold text-gray-800 mb-2">Steps</label>
+        <div class="space-y-2 text-xs text-gray-700">
+          <p class="font-medium text-gray-900">1. Register & Complete Basic Details</p>
+          <div id="extra-steps" class="hidden space-y-2 pt-1 border-t border-gray-100">
+            <p>2. Verify Aadhaar via DigiLocker OTP</p>
+            <p>3. Submit PAN card details & selfie verification</p>
+            <p>4. Link active Bank account for verification</p>
+            <p>5. Complete initial deposit or first trade</p>
+          </div>
+        </div>
+        <button id="toggle-steps-btn" onclick="toggleSteps()" class="mt-3 text-xs font-semibold text-blue-600 hover:underline">
+          View more
+        </button>
+      </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-3 inset-x-0 max-w-[420px] mx-auto px-4 pointer-events-none">
+      <div class="bg-white/95 backdrop-blur-md rounded-full border border-gray-100 shadow-xl shadow-black/5 p-1.5 flex justify-between items-center pointer-events-auto">
+        <button onclick="showDashboard()" id="tab-tasks" class="flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-1.5 text-xs font-bold transition bg-slate-950 text-white shadow-md">
+          <i data-lucide="layers" class="w-4 h-4"></i>
+          <span>Tasks</span>
+        </button>
+        <button onclick="setActiveTab(this)" class="flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-900 transition">
+          <i data-lucide="gift" class="w-4 h-4"></i>
+          <span>Reward</span>
+        </button>
+        <button onclick="setActiveTab(this)" class="flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-900 transition">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Offers</span>
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- Interactive Logic & Configuration -->
+  <script>
+    // EDIT YOUR DETAILS, LINKS, AND GALLERY IMAGE FILENAMES HERE:
+    const TASKS_DATA = [
+      {
+        id: 1,
+        title: "Lemonn",
+        taskName: "Open Demat Account",
+        image: "lemonn.png",
+        reward: "₹300.00",
+        steps: 5,
+        link: "https://fast2cash.in/camp/ruenox7q"
+      },
+      {
+        id: 2,
+        title: "Choics Finx",
+        taskName: "Open Account & First Trade",
+        image: "choice.png",
+        reward: "₹200.00",
+        steps: 4,
+        link: "https://fast2cash.in/camp/choicefx"
+      },
+      {
+        id: 3,
+        title: "Novio",
+        taskName: "Make A Fixed Deposit",
+        image: "novio.png",
+        reward: "₹1300.00",
+        steps: 6,
+        link: "https://fast2cash.in/camp/noviofd"
+      },
+      {
+        id: 4,
+        title: "Stocko",
+        taskName: "Open Demat Account & Complete Trade",
+        image: "stocko.png",
+        reward: "₹500.00",
+        steps: 4,
+        link: "https://fast2cash.in/camp/stocko"
+      },
+      {
+        id: 5,
+        title: "Kotak811",
+        taskName: "Open Demat Account & Deposit",
+        image: "kotak.png",
+        reward: "₹500.00",
+        steps: 3,
+        link: "https://fast2cash.in/camp/kotak811"
+      },
+      {
+        id: 6,
+        title: "Coinswitch",
+        taskName: "Registration & Buy Crypto",
+        image: "coinswitch.png",
+        reward: "₹300.00",
+        steps: 4,
+        link: "https://fast2cash.in/camp/coinswitch"
+      },
+      {
+        id: 7,
+        title: "Upstox",
+        taskName: "Open A Demat Account",
+        image: "upstox.png",
+        reward: "₹300.00",
+        steps: 5,
+        link: "https://fast2cash.in/camp/upstox"
+      }
+    ];
+
+    const tasksContainer = document.getElementById("tasks-container");
+
+    function renderTasks() {
+      tasksContainer.innerHTML = "";
+      TASKS_DATA.forEach((task) => {
+        const card = document.createElement("div");
+        card.className = "cursor-pointer bg-white border border-gray-100 rounded-2xl p-3.5 flex items-center justify-between shadow-sm hover:shadow-md transition active:scale-[0.99]";
+        card.onclick = () => openTaskDetails(task);
+
+        card.innerHTML = `
+          <div class="flex items-center gap-3">
+            <img src="${task.image}" onerror="this.src='https://via.placeholder.com/44'" class="w-11 h-11 rounded-xl object-cover border border-gray-100 shadow-sm" alt="${task.title}" />
+            <div>
+              <h3 class="font-semibold text-gray-900 text-sm">${task.title}</h3>
+              <p class="text-xs text-gray-400">${task.taskName}</p>
+            </div>
+          </div>
+          <div class="bg-gradient-to-r from-gray-100 to-slate-200 text-gray-800 text-xs font-bold px-3 py-1.5 rounded-xl border border-gray-200/50 shadow-inner">
+            ${task.reward}
+          </div>
+        `;
+        tasksContainer.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    renderTasks();
+
+    const viewDashboard = document.getElementById('view-dashboard');
+    const viewDetails = document.getElementById('view-details');
+    const backBtn = document.getElementById('back-btn');
+    const appLogo = document.getElementById('app-logo');
+    const pageTitle = document.getElementById('page-title');
+
+    function openTaskDetails(task) {
+      viewDashboard.classList.add('hidden');
+      viewDetails.classList.remove('hidden');
+
+      backBtn.classList.remove('hidden');
+      appLogo.classList.add('hidden');
+      pageTitle.textContent = task.title;
+
+      document.getElementById('detail-task-logo').src = task.image;
+      document.getElementById('detail-task-name').textContent = task.taskName;
+      document.getElementById('detail-reward').textContent = `Earn ${task.reward}`;
+      document.getElementById('detail-steps').textContent = `Steps ${task.steps}`;
+      document.getElementById('campaign-url').value = task.link;
+
+      window.scrollTo(0, 0);
+    }
+
+    function showDashboard() {
+      viewDetails.classList.add('hidden');
+      viewDashboard.classList.remove('hidden');
+
+      backBtn.classList.add('hidden');
+      appLogo.classList.remove('hidden');
+      pageTitle.textContent = 'Task To Earn';
+    }
+
+    function copyLink() {
+      const copyInput = document.getElementById('campaign-url');
+      navigator.clipboard.writeText(copyInput.value).then(() => {
+        const toast = document.getElementById('copy-toast');
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 2500);
+      });
+    }
+
+    function toggleSteps() {
+      const extraSteps = document.getElementById('extra-steps');
+      const toggleBtn = document.getElementById('toggle-steps-btn');
+      if (extraSteps.classList.contains('hidden')) {
+        extraSteps.classList.remove('hidden');
+        toggleBtn.textContent = 'View less';
+      } else {
+        extraSteps.classList.add('hidden');
+        toggleBtn.textContent = 'View more';
+      }
+    }
+
+    function setActiveTab(button) {
+      document.querySelectorAll('nav button').forEach(b => {
+        b.className = "flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-900 transition";
+      });
+      button.className = "flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-1.5 text-xs font-bold transition bg-slate-950 text-white shadow-md";
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
